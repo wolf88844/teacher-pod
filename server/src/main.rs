@@ -1,16 +1,18 @@
 use db::{get_pg_pool, init_pg_pool};
 use salvo::{
-    http::{self, Method},
+    http::Method,
     hyper::header::{ACCEPT, AUTHORIZATION},
     prelude::*,
 };
 use salvo_cors::{Any, Cors};
 use task::schedule_task;
 
+mod api;
 mod auth;
 mod db;
 mod error;
 mod listennotes;
+mod models;
 mod task;
 
 pub trait Routers {
@@ -66,7 +68,7 @@ async fn main() {
         .push(Router::with_path("/").get(hello_world))
         .push(Router::with_path("<*path>").options(all_pass));
 
-    let server_addr = std::env::var("SERVER_ADDR").unwrap();
+    let server_addr = std::env::var("SERVER_ADD").unwrap();
 
     let acceptor = TcpListener::new(server_addr).bind().await;
     Server::new(acceptor).serve(router).await;
