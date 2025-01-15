@@ -1,3 +1,4 @@
+use api::account::AccountApi;
 use db::{get_pg_pool, init_pg_pool};
 use salvo::{
     http::Method,
@@ -66,6 +67,7 @@ async fn main() {
     let router = Router::new()
         .hoop(cors_handler)
         .push(Router::with_path("/").get(hello_world))
+        .append(&mut AccountApi::build())
         .push(Router::with_path("<*path>").options(all_pass));
 
     let server_addr = std::env::var("SERVER_ADD").unwrap();
