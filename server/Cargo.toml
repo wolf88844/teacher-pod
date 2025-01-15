@@ -4,3 +4,25 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+tokio = { version = "1.36.0", features = ["full"] }
+serde={version="1.0.160",features=["derive"]}
+serde_json={version="1.0.102"}
+salvo={version="0.76.0",features=["cors"]}
+salvo-cors={version="0.76.0"}
+once_cell={version="1.20.2"}
+
+sqlx={version="0.8.3",features=["runtime-tokio-rustls","chrono","json","postgres"]}
+
+dotenv={version="0.15.0"}
+chrono={version="0.4.23",features=["serde"]}
+
+log={version="0.4.23"}
+fern={version="0.7.1"}
+
+md5={version="0.7.0"}
+fastrand={version="2.3.0"}
+jsonwebtoken={version="9.3.0"}
+
+podcast-api="^1.0.1"
+
+models={path="../models",features=["server"]}
