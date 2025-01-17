@@ -1,38 +1,96 @@
+#![allow(non_snake_case)]
+
+use components::{modal::PlayBoxInfo, navbar::NavBar};
+use components::form::SearchBox;
 use dioxus::prelude::*;
+use dioxus_free_icons::{icons::fa_solid_icons, Icon};
+use dioxus_toast::{ToastFrame, ToastManager};
+use mode::is_dark;
+mod mode;
+mod hooks;
+mod components;
+mod data;
+mod pages;
 
-const FAVICON: Asset = asset!("/assets/favicon.ico");
-const MAIN_CSS: Asset = asset!("/assets/main.css");
-const HEADER_SVG: Asset = asset!("/assets/header.svg");
-const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
+static DARK_MODE:GlobalSignal<bool> = Global::new(||{
+    let dark = is_dark();
+    mode::mode(dark);
+    dark
+});
 
-fn main() {
-    dioxus::launch(App);
-}
+static TOAST:GlobalSignal<ToastManager> = Global::new(||{
+    ToastManager::default()
+});
 
-#[component]
-fn App() -> Element {
-    rsx! {
-        document::Link { rel: "icon", href: FAVICON }
-        document::Link { rel: "stylesheet", href: MAIN_CSS } document::Link { rel: "stylesheet", href: TAILWIND_CSS }
-        Hero {}
-
+static PLAYER_STATUS:GlobalSignal<PlayBoxInfo> = Global::new(||{
+    PlayBoxInfo {
+        display: true,
+        pause: true,
+        current: usize::MAX,
+        playlist: None,
     }
+});
+
+
+
+fn main(){
+    wasm_logger::init(wasm_logger::Config::new(log::Level::Debug));
+    log::info!("TeacherPod Init");
+    dioxus::launch(app);
+}
+
+#[derive(Routable,Clone)]
+enum Route{
+    #[route("/")]
+    Home,
+    #[route("/search/:query")]
+    SearchBox{
+        query:String
+    },
 }
 
 #[component]
-pub fn Hero() -> Element {
-    rsx! {
-        div {
-            id: "hero",
-            img { src: HEADER_SVG, id: "header" }
-            div { id: "links",
-                a { href: "https://dioxuslabs.com/learn/0.6/", "📚 Learn Dioxus" }
-                a { href: "https://dioxuslabs.com/awesome", "🚀 Awesome Dioxus" }
-                a { href: "https://github.com/dioxus-community/", "📡 Community Libraries" }
-                a { href: "https://github.com/DioxusLabs/sdk", "⚙️ Dioxus Development Kit" }
-                a { href: "https://marketplace.visualstudio.com/items?itemName=DioxusLabs.dioxus", "💫 VSCode Extension" }
-                a { href: "https://discord.gg/XgGxMSkvUM", "👋 Community Discord" }
-            }
+fn Home()->Element{
+    rsx!(
+        
+    )
+}
+
+fn app()->Element{
+    let toast = TOAST.signal();
+    rsx!(
+        ToastFrame{
+            manager:toast,
         }
-    }
+        NavBar{},
+        Footer{},
+    )
+}
+
+fn Footer()->Element{
+    rsx!(
+        br{}
+        div{
+            class:"bg-gray-100 dark:bg-gray-600 pt-2",
+            div{
+                class:"flex pb-5 px-3 m-auto pt-5 border-t text-gray-800 text-sm 
+                flex-col md:flex-row max-w-6xl",
+                div{
+                    class:"mt-2 text-black dark:text-white",
+                    "© Copyright 2025 All rights reserved."
+                }
+                div{
+                    class:"md:flex-auto md:flex-row-reverse mt-2 flex-row flex",
+                    a{
+                        class:"w-6 mx-1 text-black dark:text-white",
+                        href:"",
+                        Icon{
+                            icon: fa_solid_icons::FaAddressBook,
+                        }
+                    }
+                }
+            }
+
+        }
+    )
 }

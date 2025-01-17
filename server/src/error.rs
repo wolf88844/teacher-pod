@@ -1,6 +1,4 @@
-use salvo::{
-    Depot, Request, Response, Writer, async_trait, hyper::StatusCode, prelude::StatusError,
-};
+use salvo::{Depot, Request, Response, Writer, async_trait, hyper::StatusCode};
 
 #[derive(Debug)]
 pub enum Error {

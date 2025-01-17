@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[cfg_attr(feature = "server", derive(sqlx::FromRow))]
-#[derive(Serialize, Deserialize, PartialEq)]
+#[derive(Serialize, Deserialize, PartialEq,Clone)]
 pub struct Account {
     pub id: i32,
     pub username: String,

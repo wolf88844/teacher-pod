@@ -1,12 +1,19 @@
 [application]
+default_platform="web"
+out_dir="dist"
+assets_dir="assets"
 
 # App (Project) Name
-name = "client"
+name = "teacher-pod"
 
 [web.app]
 
 # HTML title tag content
-title = "client"
+title = "TeacherPod | 🎙️"
+
+[web.watcher]
+watch_path=["src","public","index.html","../models"]
+index_on_404=true
 
 # include `assets` in web platform
 [web.resource]
@@ -15,10 +22,16 @@ title = "client"
 style = []
 
 # Additional JavaScript files
-script = []
+script = [
+    '/asserts/tailwind.js',
+    '/asserts/tailwind.config.js'
+]
 
 [web.resource.dev]
 
 # Javascript code file
 # serve: [dev-server] only
 script = []
+
+[application.tools]
+binaryen={wasm_opt=true}

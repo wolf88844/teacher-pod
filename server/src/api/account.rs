@@ -6,10 +6,10 @@ use salvo::{Depot, handler};
 use serde_json::json;
 
 use crate::api::block_unlogin;
-use crate::{auth, Routers};
 use crate::error::{ApiResult, Error};
 use crate::models::account::AccountFn;
 use crate::models::account::AuthFn;
+use crate::{Routers, auth};
 
 #[handler]
 async fn current_account(depot: &mut Depot, resp: &mut Response) -> ApiResult {
@@ -64,19 +64,19 @@ async fn login(req: &mut Request, resp: &mut Response) -> ApiResult {
 }
 
 #[handler]
-async fn register(req:&mut Request,resp:&mut Response)->ApiResult{
+async fn register(req: &mut Request, resp: &mut Response) -> ApiResult {
     let email = req.query::<String>("email");
-    if email.is_none(){
+    if email.is_none() {
         return Err(Error::QueryNotFound("email".into()));
     }
 
     let password = req.query::<String>("password");
-    if password.is_none(){
+    if password.is_none() {
         return Err(Error::QueryNotFound("password".into()));
     }
 
     let username = req.query::<String>("username");
-    if username.is_none(){
+    if username.is_none() {
         return Err(Error::QueryNotFound("username".into()));
     }
 
@@ -84,25 +84,27 @@ async fn register(req:&mut Request,resp:&mut Response)->ApiResult{
     let password = password.unwrap();
     let username = username.unwrap();
 
-    if Account::email_exists(&email).await{
+    if Account::email_exists(&email).await {
         return Err(Error::DataExists);
     }
 
-    let _=Account::insert_new_user(&username, &email, &password).await;
+    let _ = Account::insert_new_user(&username, &email, &password).await;
     resp.render(Json(json!({"message":"success"})));
-
 
     Ok(())
 }
 
 pub struct AccountApi;
 
-impl Routers for AccountApi{
+impl Routers for AccountApi {
     fn build() -> Vec<Router> {
         vec![
             Router::new().path("/login").post(login),
             Router::new().path("/regisiter").post(register),
-            Router::new().path("self").hoop(block_unlogin).get(current_account),
+            Router::new()
+                .path("self")
+                .hoop(block_unlogin)
+                .get(current_account),
         ]
     }
 }
