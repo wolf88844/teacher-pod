@@ -3,13 +3,12 @@ use dioxus_free_icons::{icons::fa_solid_icons, Icon};
 
 use crate::Route;
 #[component]
-pub fn SearchBox(query:String)->Element{
-
-    let route:Route = use_route();
+pub fn SearchBox(query: String) -> Element {
+    let route: Route = use_route();
     let path = route.to_string();
-    let mut text = use_signal(||{
-        if path =="/search"{
-            if !query.is_empty(){
+    let mut text = use_signal(|| {
+        if path == "/search" {
+            if !query.is_empty() {
                 return query;
             }
         }

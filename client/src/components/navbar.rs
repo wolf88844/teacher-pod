@@ -1,10 +1,14 @@
+use crate::{
+    data::account::current_user,
+    mode::{is_dark, mode},
+    Route, DARK_MODE,
+};
 use dioxus::prelude::*;
 use dioxus_free_icons::icons::fa_solid_icons;
 use dioxus_free_icons::Icon;
-use crate::{data::account::current_user, mode::{is_dark, mode}, Route, DARK_MODE};
 
 #[component]
-pub fn NavBar()->Element{
+pub fn NavBar() -> Element {
     let login_button = rsx!(
         div{
             class:"ml-5 relative",
@@ -18,20 +22,17 @@ pub fn NavBar()->Element{
 
     let current_url = use_route::<Route>().to_string();
 
-
     let default_class = "text-black dark:text-white px-3 py-2 rounded-md text-sm font-medium";
     let current_class = "bg-gray-200 dark:bg-gray-900 text-black dark:text-white px-3 py-2 rounded-md text-sm font-medium";
 
-    let default_mobile_class = "text-black dark:text-white block px-3 py-2 rounded-md text-base font-medium";
+    let default_mobile_class =
+        "text-black dark:text-white block px-3 py-2 rounded-md text-base font-medium";
     let current_mobile_class = "bg-gray-200 dark:bg-gray-900 text-black dark:text-white block px-3 py-2 rounded-md text-base font-medium";
 
-    let user_center = use_resource(|| async move{
-        current_user().await
-    });
+    let user_center = use_resource(|| async move { current_user().await });
 
-
-    let user_center = match user_center.read_unchecked().as_ref(){
-        Some(Some(user))=>rsx!(
+    let user_center = match user_center.read_unchecked().as_ref() {
+        Some(Some(user)) => rsx!(
             div{
                 class:"ml-3 relative",
                 div{
@@ -48,13 +49,17 @@ pub fn NavBar()->Element{
                 }
             }
         ),
-        _=>login_button,
+        _ => login_button,
     };
 
-    let mode_icon = if *DARK_MODE.read(){
-        rsx!(Icon{icon: fa_solid_icons::FaSun})
-    }else{
-        rsx!(Icon{icon: fa_solid_icons::FaMoon})
+    let mode_icon = if *DARK_MODE.read() {
+        rsx!(Icon {
+            icon: fa_solid_icons::FaSun
+        })
+    } else {
+        rsx!(Icon {
+            icon: fa_solid_icons::FaMoon
+        })
     };
 
     rsx!(

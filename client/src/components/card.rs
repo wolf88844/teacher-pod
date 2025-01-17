@@ -4,7 +4,7 @@ use models::podcast::{BestPodcasts, Podcast};
 use crate::PLAYER_STATUS;
 
 #[component]
-pub fn Card(children:Element)->Element{
+pub fn Card(children: Element) -> Element {
     rsx!(
         div{
             class:"bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg",
@@ -16,13 +16,13 @@ pub fn Card(children:Element)->Element{
     )
 }
 
-#[derive(Props,PartialEq,Clone)]
-pub struct RecommendListPrpos{
-    data:BestPodcasts,
+#[derive(Props, PartialEq, Clone)]
+pub struct RecommendListPrpos {
+    data: BestPodcasts,
 }
 
 #[component]
-pub fn RecommendList(props:RecommendListPrpos)->Element{
+pub fn RecommendList(props: RecommendListPrpos) -> Element {
     rsx!(
         div{
             class:"mt-6 grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8",
@@ -52,36 +52,36 @@ pub fn RecommendList(props:RecommendListPrpos)->Element{
 }
 
 #[component]
-pub fn EpisodeList(data:Podcast)->Element{
+pub fn EpisodeList(data: Podcast) -> Element {
     let playbox = PLAYER_STATUS.signal();
     let episodes = data.episodes.clone();
 
-    rsx!(
-        Card(rsx!())
+    Card(
+        div{}
     )
 }
 
 #[component]
-pub fn PopularTopics(data:Vec<String>)->Element{
-   rsx!(
-    div{
-        class:"mt-6 grid grid-cols-6 gap-x-4 gap-y-1 max-w-2xl",
-        for item in data{
-            div{
-                class:"col-span-2",
-                Link{
-                    to:"/topic/{item}",
-                    img{
-                        class:"rounded-xl brightness-75",
-                        src:"{item}",
-                    }
-                }
-                p{
-                    class:"text-xs -translate-y-6 text-white font-semibold sm:-translate-y-8 sm:text-base translate-x-3",
-                    "{item}"
-                }
-            }
-        }
-    }
-   ) 
+pub fn PopularTopics(data: Vec<String>) -> Element {
+    rsx!(
+     div{
+         class:"mt-6 grid grid-cols-6 gap-x-4 gap-y-1 max-w-2xl",
+         for item in data{
+             div{
+                 class:"col-span-2",
+                 Link{
+                     to:"/topic/{item}",
+                     img{
+                         class:"rounded-xl brightness-75",
+                         src:"{item}",
+                     }
+                 }
+                 p{
+                     class:"text-xs -translate-y-6 text-white font-semibold sm:-translate-y-8 sm:text-base translate-x-3",
+                     "{item}"
+                 }
+             }
+         }
+     }
+    )
 }

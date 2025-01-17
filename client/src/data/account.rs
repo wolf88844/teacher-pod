@@ -1,25 +1,25 @@
-use models::{account::Account, ApiData};
-use serde::{Deserialize, Serialize};
 use super::request::{get, post};
 use crate::hooks::use_storage;
+use models::{account::Account, ApiData};
+use serde::{Deserialize, Serialize};
 
-
-pub fn token()->String{
+pub fn token() -> String {
     let storage = use_storage().unwrap();
     storage.get_item("auth").unwrap().unwrap_or_default()
 }
 
-pub async fn current_user()->Option<Account>{
-    let req = get("/self").await
-    .header("Authorization",&format!("Bearer {}",token()))
-    .build();
+pub async fn current_user() -> Option<Account> {
+    let req = get("/self")
+        .await
+        .header("Authorization", &format!("Bearer {}", token()))
+        .build();
 
-    if req.is_err(){
+    if req.is_err() {
         return None;
     }
 
     let resp = req.unwrap().send().await;
-    if !resp.is_ok(){
+    if !resp.is_ok() {
         return None;
     }
 
@@ -28,24 +28,22 @@ pub async fn current_user()->Option<Account>{
     Some(resp.json::<ApiData<Account>>().await.unwrap().data)
 }
 
-#[derive(Serialize,Deserialize)]
-struct AuthInfo{
-    expire:i64,
-    token:String,
+#[derive(Serialize, Deserialize)]
+struct AuthInfo {
+    expire: i64,
+    token: String,
 }
 
-pub async fn login(email:&str,password:&str)->anyhow::Result<()>{
-    let path = format!("/login?email={}&password={}",email,password);
+pub async fn login(email: &str, password: &str) -> anyhow::Result<()> {
+    let path = format!("/login?email={}&password={}", email, password);
     let resp = post(&path).await.build().unwrap().send().await?;
     let data = resp.json::<ApiData<AuthInfo>>().await?;
 
-    if resp.status()!=200{
-        return Err(anyhow::anyhow!(
-            match data.message.as_str(){
-                "data not found"=>"User Info Not Found".to_string(),
-                _=>data.message,
-            }
-        ))
+    if resp.status() != 200 {
+        return Err(anyhow::anyhow!(match data.message.as_str() {
+            "data not found" => "User Info Not Found".to_string(),
+            _ => data.message,
+        }));
     }
 
     let storage = use_storage()?;
@@ -53,10 +51,13 @@ pub async fn login(email:&str,password:&str)->anyhow::Result<()>{
     Ok(())
 }
 
-pub async fn register(email:&str,username:&str,password:&str)->anyhow::Result<()>{
-    let path = format!("/register?email={}&username={}&password={}",email,username,password);
+pub async fn register(email: &str, username: &str, password: &str) -> anyhow::Result<()> {
+    let path = format!(
+        "/register?email={}&username={}&password={}",
+        email, username, password
+    );
     let resp = post(&path).await.build().unwrap().send().await?;
-    if resp.status()!=200{
+    if resp.status() != 200 {
         return Err(anyhow::anyhow!("Register Failed"));
     }
     Ok(())

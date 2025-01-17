@@ -4,7 +4,7 @@ use models::{account::Account, data::SearchInfo};
 use crate::PLAYER_STATUS;
 
 #[component]
-pub fn SimpleUserList(data:Vec<Account>) ->Element{
+pub fn SimpleUserList(data: Vec<Account>) -> Element {
     rsx!(
         ul{
             class: "divide-y divide-gray-200 dark:divide-gray-700",
@@ -41,7 +41,7 @@ pub fn SimpleUserList(data:Vec<Account>) ->Element{
 }
 
 #[component]
-pub fn SearchResultList(data:SearchInfo)->Element{
+pub fn SearchResultList(data: SearchInfo) -> Element {
     let mut playbox = PLAYER_STATUS.signal();
     let list_display = data.results.iter().map(|v|{
         let v_clone = v.clone();

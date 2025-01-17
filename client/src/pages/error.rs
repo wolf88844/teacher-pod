@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 #[component]
-pub fn _404()->Element{
+pub fn _404() -> Element {
     rsx!(
         main{
             class:"h-180 w-full flex flex-col justify-center items-center",

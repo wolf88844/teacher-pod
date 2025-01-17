@@ -1,41 +1,40 @@
 use std::usize;
 
-use dioxus_free_icons::Icon;
-use dioxus_free_icons::icons::fa_solid_icons;
-use serde::{Deserialize, Serialize};
-use models::podcast::Episode;
 use dioxus::prelude::*;
+use dioxus_free_icons::icons::fa_solid_icons;
+use dioxus_free_icons::Icon;
+use models::podcast::Episode;
+use serde::{Deserialize, Serialize};
 
 use crate::PLAYER_STATUS;
 
-
 #[derive(Serialize, Deserialize)]
-pub struct PlayBoxInfo{
-    pub playlist:Option<Vec<Episode>>,
-    pub current:usize,
-    pub display:bool,
-    pub pause:bool,
+pub struct PlayBoxInfo {
+    pub playlist: Option<Vec<Episode>>,
+    pub current: usize,
+    pub display: bool,
+    pub pause: bool,
 }
 
-pub fn PlayBox()->Element{
-    let mut current_content = use_signal(||usize::MAX);
+pub fn PlayBox() -> Element {
+    let mut current_content = use_signal(|| usize::MAX);
     let mut status = PLAYER_STATUS.signal();
     let status_content = status.read().current;
 
-    let playlist = if status.read().playlist.is_none(){
+    let playlist = if status.read().playlist.is_none() {
         vec![]
-    }else{
+    } else {
         status.read().playlist.clone().unwrap()
     };
 
-    if status_content != *current_content.read(){
+    if status_content != *current_content.read() {
         current_content.set(status_content);
-        return rsx!{
+        return rsx! {
             div{}
-        }
+        };
     }
 
-    if playlist.get(status.read().current).is_none(){
+    if playlist.get(status.read().current).is_none() {
         return rsx!(
             div{
                 class: "fixed bottom-12 left-2 rounded-full w-10 h-10
@@ -48,38 +47,38 @@ pub fn PlayBox()->Element{
                     }
                 }
             }
-        )
+        );
     }
 
     let info = playlist.get(status.read().current).unwrap();
 
-    let player_hidden = if !status.read().display{
+    let player_hidden = if !status.read().display {
         "hidden"
-    }else{
+    } else {
         "hidden sm:block"
     };
 
-    let icon_hidden = if status.read().display{
+    let icon_hidden = if status.read().display {
         "hidden"
-    }else{
+    } else {
         "hidden sm:block"
     };
 
-    let full_titile = if info.title.is_empty(){
+    let full_titile = if info.title.is_empty() {
         &info.title_original
-    }else{
+    } else {
         &info.title
     };
 
-    let simple_tilte = if full_titile.len()>32{
-        format!("{}...",&full_titile[0..32])
-    }else{
+    let simple_tilte = if full_titile.len() > 32 {
+        format!("{}...", &full_titile[0..32])
+    } else {
         full_titile.to_string()
     };
 
     rsx!(
         div{
-            class: "{icon_hidden} fixed bottom-12 left-2 rounded-full w-10 h-10 
+            class: "{icon_hidden} fixed bottom-12 left-2 rounded-full w-10 h-10
             bg-white dark:bg-gray-900 hover:bg-block dark:hover:bg-white",
             button{
                 class:"justify-center w-full h-full text-black dark:text-white hover:text-white dark:hover:text-black",
@@ -119,7 +118,7 @@ pub fn PlayBox()->Element{
                                     class:"inline-flex",
                                     role:"group",
                                     button{
-                                        class:"rounded-full inline-block px-1 py-1 text-black dark:text-white font-medium 
+                                        class:"rounded-full inline-block px-1 py-1 text-black dark:text-white font-medium
                                         text-xs leading-tight hover:bg-gray-800 hover:text-white transition duration-150 ease-in-out",
                                         r#type:"button",
                                         Icon{
@@ -127,7 +126,7 @@ pub fn PlayBox()->Element{
                                         }
                                     }
                                     button{
-                                        class:"rounded-full inline-block px-1 py-1 text-black dark:text-white font-medium 
+                                        class:"rounded-full inline-block px-1 py-1 text-black dark:text-white font-medium
                                         text-xs leading-tight hover:bg-gray-800 hover:text-white transition duration-150 ease-in-out",
                                         r#type:"button",
                                         onclick:move|_|{
