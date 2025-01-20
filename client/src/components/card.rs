@@ -56,9 +56,7 @@ pub fn EpisodeList(data: Podcast) -> Element {
     let playbox = PLAYER_STATUS.signal();
     let episodes = data.episodes.clone();
 
-    Card(
-        div{}
-    )
+    Card(div {})
 }
 
 #[component]

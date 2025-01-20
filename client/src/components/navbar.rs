@@ -8,7 +8,7 @@ use dioxus_free_icons::icons::fa_solid_icons;
 use dioxus_free_icons::Icon;
 
 #[component]
-pub fn NavBar() -> Element {
+pub fn NavBar(query: String) -> Element {
     let login_button = rsx!(
         div{
             class:"ml-5 relative",
@@ -109,7 +109,7 @@ pub fn NavBar() -> Element {
                         class:"absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0",
                         div{
                             class:"pr-6 hidden sm:block",
-                            crate::components::form::SearchBox{}
+                            crate::components::form::SearchBox{query}
                         }
                         button{
                             class:"bg-white dark:bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white hover:bg-black dark:hover:bg-white dark:hover:text-black",
