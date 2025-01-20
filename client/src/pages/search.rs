@@ -23,22 +23,22 @@ pub fn SearchResult(query: String) -> Element {
     let request_data = use_resource(move || {
         let value = query_str.clone();
         async move {
-        let res = request::get(&format!("/search/{}", value))
-            .await
-            .send()
-            .await;
-        let res = if let Ok(resp) = res {
-            resp
-        } else {
-            return RequestData { result: None };
-        };
+            let res = request::get(&format!("/search/{}", value))
+                .await
+                .send()
+                .await;
+            let res = if let Ok(resp) = res {
+                resp
+            } else {
+                return RequestData { result: None };
+            };
 
-        let result = res.json::<ApiData<SearchInfo>>().await.unwrap_or_default();
-        let result = result.data;
-        RequestData {
-            result: Some(result),
+            let result = res.json::<ApiData<SearchInfo>>().await.unwrap_or_default();
+            let result = result.data;
+            RequestData {
+                result: Some(result),
+            }
         }
-    }
     });
 
     let data = request_data.read();
