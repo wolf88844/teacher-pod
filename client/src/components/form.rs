@@ -36,7 +36,7 @@ pub fn SearchBox(query: String) -> Element {
                 oninput: move |evt| text.set(evt.value()),
                 onkeydown: move|evt:Event<KeyboardData>|{
                     if evt.code()==Code::Enter && !text.read().is_empty(){
-                        Route::SearchBox{ query: text.read().clone() };
+                        Route::SearchResultList{ query: text.read().clone() };
                     }
                 }
             }

@@ -13,6 +13,7 @@ struct RequestData {
     result: Option<SearchInfo>,
 }
 
+#[component]
 pub fn SearchResult(query: String) -> Element {
     if query.is_empty() {
         return rsx! {

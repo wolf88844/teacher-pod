@@ -1,6 +1,4 @@
 #![allow(non_snake_case)]
-
-use components::form::SearchBox;
 use components::{modal::PlayBoxInfo, navbar::NavBar};
 use dioxus::prelude::*;
 use dioxus_free_icons::{icons::fa_solid_icons, Icon};
@@ -36,14 +34,58 @@ fn main() {
 #[derive(Routable, Clone)]
 enum Route {
     #[route("/")]
-    Home,
+    Discover {},
+
+    #[route("/login")]
+    Login {},
+    #[route("/register")]
+    Register {},
+
+    #[route("/user/:userid")]
+    User { userid: String },
+
+    #[route("/content/:id")]
+    Content { id: String },
+
     #[route("/search/:query")]
-    SearchBox { query: String },
+    SearchResultList { query: String },
+
+    #[route("/..route")]
+    _404 {},
 }
 
 #[component]
-fn Home() -> Element {
-    rsx!()
+fn Discover() -> Element {
+    rsx!(pages::discover::Discover {})
+}
+
+#[component]
+fn Login() -> Element {
+    rsx!(pages::login::Login {})
+}
+
+#[component]
+fn Register() -> Element {
+    rsx!(pages::login::Register {})
+}
+
+#[component]
+fn User(userid: String) -> Element {
+    rsx!(pages::user::User { userid })
+}
+
+#[component]
+fn Content(id: String) -> Element {
+    rsx!(pages::content::Content { id })
+}
+
+#[component]
+fn SearchResultList(query: String) -> Element {
+    rsx!(pages::search::SearchResult { query })
+}
+#[component]
+fn _404() -> Element {
+    rsx!(pages::error::_404 {})
 }
 
 fn app() -> Element {
@@ -52,8 +94,9 @@ fn app() -> Element {
         ToastFrame{
             manager:toast,
         }
-        NavBar{},
+        //NavBar{None},
         Footer{},
+        Outlet::<Route>{}
     )
 }
 
