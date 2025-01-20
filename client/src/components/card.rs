@@ -53,10 +53,45 @@ pub fn RecommendList(props: RecommendListPrpos) -> Element {
 
 #[component]
 pub fn EpisodeList(data: Podcast) -> Element {
-    let playbox = PLAYER_STATUS.signal();
+    let mut playbox = PLAYER_STATUS.signal();
     let episodes = data.episodes.clone();
 
-    Card(div {})
+    let elements = episodes.iter().enumerate().map(|(index, item)| {
+            let min = (item.audio_length_sec as f32)/60_f32;
+            let data_clone = data.clone();
+            rsx!(
+                a{
+                    class:"block px-6 py-4 border-b border-gray-200 w-full text-dark 
+                    hover:bg-gray-100 hover:text-gray-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-gray-100 
+                    cursor-pointer",
+                    href:"javascript:void(0);",
+                    key:"{data.id}@{index}",
+                    onclick:move|_|{
+                        let current = index;
+                        playbox.write().playlist = Some(data_clone.episodes.clone());
+                        playbox.write().current = current;
+                        playbox.write().display = true;
+                    },
+                    strong{
+                        "item.title"
+                    }
+                    span{
+                        class:"float-right text-gray-400",
+                        "{min:.2} min"
+                    }
+                }
+            )
+    });
+
+    rsx!(
+        div{
+            class:"bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg",
+            div{
+                class:"px-4 py-5 sm:px-6",
+                {elements}
+            }
+        }
+    )
 }
 
 #[component]
