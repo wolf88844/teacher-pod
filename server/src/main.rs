@@ -1,4 +1,4 @@
-use api::account::AccountApi;
+use api::{account::AccountApi, podcast::PodcastApi, search::SearchApi};
 use db::{get_pg_pool, init_pg_pool};
 use salvo::{
     http::Method,
@@ -68,6 +68,8 @@ async fn main() {
         .hoop(cors_handler)
         .push(Router::with_path("/").get(hello_world))
         .append(&mut AccountApi::build())
+        .append(&mut PodcastApi::build())
+        .append(&mut SearchApi::build())
         .push(Router::with_path("<*path>").options(all_pass));
 
     let server_addr = std::env::var("SERVER_ADD").unwrap();

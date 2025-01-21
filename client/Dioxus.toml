@@ -12,7 +12,7 @@ name = "teacher-pod"
 title = "TeacherPod | 🎙️"
 
 [web.watcher]
-watch_path=["src","public","index.html","../models"]
+watch_path=["src","public","assets","index.html","../models"]
 index_on_404=true
 
 # include `assets` in web platform
@@ -23,8 +23,7 @@ style = []
 
 # Additional JavaScript files
 script = [
-    '/asserts/tailwind.js',
-    '/asserts/tailwind.config.js'
+    'tailwind.config.js'
 ]
 
 [web.resource.dev]
